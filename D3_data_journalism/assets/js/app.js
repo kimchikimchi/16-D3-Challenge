@@ -26,7 +26,7 @@ const chartGroup = svg.append('g')
 
 // Load the CSV file
 d3.csv('assets/data/data.csv').then(healthData => {
-    console.log(healthData);
+    // console.log(healthData);
     
     // Convert numeric fields from string type to integers
     healthData.forEach(row => {
@@ -46,13 +46,7 @@ d3.csv('assets/data/data.csv').then(healthData => {
     const xAxis = d3.axisBottom(xScale);
     const yAxis = d3.axisLeft(yScale);
     
-    // Append two SVG group elements to the chartGroup area,
-    // and create the bottom and left axes inside of them
-    chartGroup.append("g")
-        .attr("transform", `translate(0, ${chartHeight})`)
-        .call(xAxis);
-    chartGroup.append("g")
-        .call(yAxis);
+
     
     // Adding tooltip
     const toolTip = d3.tip()
@@ -84,7 +78,7 @@ d3.csv('assets/data/data.csv').then(healthData => {
         .attr('y', d => yScale(d.healthcare)+5)
         .text(d => d.abbr)
         .on("mouseover", toolTip.show)
-        .on("mouseout", toolTip.hide);;
+        .on("mouseout", toolTip.hide);
 
     // Add axes labels
     chartGroup.append("text")
@@ -98,6 +92,14 @@ d3.csv('assets/data/data.csv').then(healthData => {
         .attr('x', 0 - svgHeight/2 + 40)
         .attr('y', 0 - chartMargin.left + 40)
         .text("Lacks Healthcare (%)");
+
+    // Append two SVG group elements to the chartGroup area,
+    // and create the bottom and left axes inside of them
+    chartGroup.append("g")
+        .attr("transform", `translate(0, ${chartHeight})`)
+        .call(xAxis);
+    chartGroup.append("g")
+        .call(yAxis);
 
     
 }).catch(error => {
