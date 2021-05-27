@@ -34,8 +34,6 @@ d3.csv('assets/data/data.csv').then(healthData => {
         row.poverty = +row.poverty;
     });
     
-    
-    
     // Configure linear scales for both axes
     const xScale = d3.scaleLinear()
         .domain(d3.extent(healthData, d => d.poverty))
@@ -56,6 +54,15 @@ d3.csv('assets/data/data.csv').then(healthData => {
     chartGroup.append("g")
         .call(yAxis);
     
+    // Adding tooltip
+    const toolTip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function(d) {
+            return `${d.state}<br>Poverty: ${d.poverty}%<br>Healthcare Lacks: ${d.healthcare}%`;
+        });
+    chartGroup.call(toolTip);
+
     // See https://www.d3-graph-gallery.com/graph/scatter_basic.html
     chartGroup.selectAll('circle')
         .data(healthData)
@@ -65,13 +72,8 @@ d3.csv('assets/data/data.csv').then(healthData => {
         .attr('cy', d => yScale(d.healthcare))
         .attr('r', 15)
         .classed('stateCircle', true)
-        // .on("mouseover", function(d) {
-        //     toolTip.show(d);
-        // })
-        // .on("mouseout", function(d,i) {
-        //     toolTip.hide(d);
-        // });
-        ;
+        .on("mouseover", toolTip.show)
+        .on("mouseout", toolTip.hide);
 
     chartGroup.selectAll('text')
         .data(healthData)
