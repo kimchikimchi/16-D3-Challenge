@@ -15,7 +15,7 @@ const chartWidth = svgWidth - chartMargin.left - chartMargin.right;
 const chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
 
 // Append svg tag along with dimensions
-const svg = d3.select('#scatter')
+const svg = d3.select('body #scatter')
     .append('svg')
     .attr('height', svgHeight)
     .attr('width', svgWidth);
@@ -75,16 +75,17 @@ d3.csv('assets/data/data.csv').then(healthData => {
         .on("mouseover", toolTip.show)
         .on("mouseout", toolTip.hide);
 
+    //Add labels
     chartGroup.selectAll('text')
         .data(healthData)
         .enter()
-        .append('tspan')
-        .attr('cx', d => xScale(d.poverty))
-        .attr('cy', d => yScale(d.healthcare))
-        .classed('stateText', true)
-        .text(d => d.abbr);
+        .append('text')
+        .attr('x', d => xScale(d.poverty)-11)
+        .attr('y', d => yScale(d.healthcare)+5)
+        .text(d => d.abbr)
+        .on("mouseover", toolTip.show)
+        .on("mouseout", toolTip.hide);;
 
-    
     // Add axes labels
     chartGroup.append("text")
         .classed('aText', true)
